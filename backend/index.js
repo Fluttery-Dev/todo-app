@@ -1,6 +1,9 @@
 const express = require("express");
+const { createTodoSchema, updateTodoSchema } = require("./types");
+const { todo } = require("./db");
 
 const app = express();
+app.use(express.json());
 
 app.get("/", (req,res)=>{
     res.json({
@@ -8,16 +11,68 @@ app.get("/", (req,res)=>{
     });
 });
 
-app.get("/todos", (req,res)=>{
+app.get("/todos", async (req,res)=>{
+    const todos = await todo.find({});
+    res.json({
+        todos: todos,
+    });
+});
+
+app.post("/todo", async (req,res)=>{
+    const payload = req.body;
+    const parsedPayload = createTodoSchema.safeParse(payload);
+    if(!parsedPayload.success){
+        res.status(411).json({
+            msg:"Bad Input"
+        });
+    }
+
+    await todo.create(
+        {
+            title: payload.title,
+            descp: payload.description,
+            completed: false,
+        }
+    );
+
+    res.json({
+        msg:"Todo Created",
+    })
+});
+
+app.put("/completed", (req,res)=>{
+    const payload = req.body;
+    const parsedPayload = updateTodoSchema.safeParse(payload);
+    if(!parsedPayload.success){
+        res.status(411).json({
+            msg:"Bad Input"
+        });
+    }
+
+    todo.update({_id:payload.id}, {completed: true});
+
+    res.json({
+        msg: "Todo updated",
+    })
 
 });
 
-app.post("/todo", (req,res)=>{
+app.delete("/todo", (req,res)=>{
+    const payload = req.body;
+    const parsedPayload = updateTodoSchema.safeParse(payload);
+    if(!parsedPayload.success){
+        res.status(411).json({
+            msg:"Bad Input"
+        });
+    }
 
-});
+    todo.deleteOne({
+        _id:payload.id,
+    })
 
-app.delete("/todo/:id", (req,res)=>{
-
+    res.json({
+        msg: "todo deleted",
+    })
 });
 
 app.listen(3000);
