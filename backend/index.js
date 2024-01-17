@@ -1,9 +1,11 @@
 const express = require("express");
 const { createTodoSchema, updateTodoSchema } = require("./types");
 const { todo } = require("./db");
+const cors = require('cors');
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 app.get("/", (req,res)=>{
     res.json({
@@ -49,7 +51,7 @@ app.put("/completed", (req,res)=>{
         });
     }
 
-    todo.update({_id:payload.id}, {completed: true});
+    todo.findOneAndUpdate({_id:payload.id}, {completed: true});
 
     res.json({
         msg: "Todo updated",
@@ -57,7 +59,7 @@ app.put("/completed", (req,res)=>{
 
 });
 
-app.delete("/todo", (req,res)=>{
+app.delete("/todo", async (req,res)=>{
     const payload = req.body;
     const parsedPayload = updateTodoSchema.safeParse(payload);
     if(!parsedPayload.success){
@@ -65,14 +67,14 @@ app.delete("/todo", (req,res)=>{
             msg:"Bad Input"
         });
     }
-
-    todo.deleteOne({
+    
+    await todo.deleteOne({
         _id:payload.id,
-    })
+    });
 
     res.json({
         msg: "todo deleted",
-    })
+    });
 });
 
 app.listen(3000);

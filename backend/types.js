@@ -1,15 +1,15 @@
 const zod = require("zod");
 
-const createTodoSchema = zod.Object(
+const createTodoSchema = zod.object(
     {
-        title: zod.String(),
-        description: zod.String(),
+        title: zod.string(),
+        description: zod.string(),
     }
 );
 
-const updateTodoSchema = zod.Object(
+const updateTodoSchema = zod.object(
     {
-        id: zod.String(),
+        id: zod.string(),
     }
 );
 
