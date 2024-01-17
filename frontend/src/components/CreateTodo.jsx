@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 
-export function CreateTodo() {
+export function CreateTodo({set}) {
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -30,6 +30,7 @@ export function CreateTodo() {
                 title: title,
                 description: description,
                 });
+                set();
                 alert("Todo Added");
         }
         }>Add Todo</button>

@@ -9,16 +9,17 @@ function App() {
 
   const [todos, updateTodos] = useState([]);
 
-  fetch("http://localhost:3000/todos").then(async(res) =>{
+  function setTodos(){
+    fetch("http://localhost:3000/todos").then(async(res) =>{
     let t = await res.json();
     let newTodos = t.todos;
     updateTodos(newTodos);
-  })
-  
+  });
+  }
+  setTodos();
     return (
       <div>
-        
-      <CreateTodo/>
+      <CreateTodo set={setTodos}/>
       <Todos todos={todos}></Todos>
       </div>
     )

@@ -32,7 +32,7 @@ app.post("/todo", async (req,res)=>{
     await todo.create(
         {
             title: payload.title,
-            descp: payload.description,
+            description: payload.description,
             completed: false,
         }
     );

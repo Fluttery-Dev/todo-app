@@ -10,7 +10,7 @@ try {
 const todoSchema = new mongoose.Schema(
     {
         title: String,
-        descp: String,
+        description: String,
         completed: Boolean,
     }
 );
