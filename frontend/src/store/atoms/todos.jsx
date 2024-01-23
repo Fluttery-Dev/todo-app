@@ -15,11 +15,6 @@ export function useFetchTodos() {
         const response = await axios.get("http://localhost:3000/todos");
         setTodos(response.data.todos);
     };
-
-    useEffect(() => {
-        fetchTodos();
-    }, [setTodos]);
-
     return fetchTodos;
 }
 
