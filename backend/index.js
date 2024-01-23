@@ -42,16 +42,17 @@ app.post("/todo", async (req,res)=>{
     })
 });
 
-app.put("/completed", (req,res)=>{
+app.put("/completed", async (req,res)=>{
     const payload = req.body;
     const parsedPayload = updateTodoSchema.safeParse(payload);
     if(!parsedPayload.success){
         res.status(411).json({
             msg:"Bad Input"
         });
+        return;
     }
 
-    todo.findOneAndUpdate({_id:payload.id}, {completed: true});
+    await todo.findOneAndUpdate({_id:payload.id}, {completed: true});
 
     res.json({
         msg: "Todo updated",
