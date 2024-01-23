@@ -1,8 +1,9 @@
 import { useState } from "react";
 import axios from "axios";
+import { useFetchTodos } from "../store/atoms/todos";
 
-export function CreateTodo({set}) {
-
+export function CreateTodo() {
+    const fetchTodos = useFetchTodos();
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
 
@@ -10,19 +11,20 @@ export function CreateTodo({set}) {
         padding:10,
         margin:10,
     };
+
     return (
     <div>
         <input type="text" style={s} placeholder="Title" 
         onChange={e=>{
             let newTitle = e.target.value;
             setTitle(newTitle);
-        }}/><br />
+        }}/> <br />
+
         <input type="text" style={s}placeholder="Description"
         onChange={e=>{
             let newDescription = e.target.value;
             setDescription(newDescription);
-        }}
-        /><br />
+        }}/> <br />
 
         <button style={s} onClick={async()=>
             {
@@ -30,7 +32,7 @@ export function CreateTodo({set}) {
                 title: title,
                 description: description,
                 });
-                set();
+                fetchTodos();
                 alert("Todo Added");
         }
         }>Add Todo</button>
